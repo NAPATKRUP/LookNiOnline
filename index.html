@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-title" content="LookNiOnline">
+	<meta name="theme-color" content="#03A9F4">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<link rel="apple-touch-icon" href="logo.jpeg">
+    <title>LookNiOnline</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        body, html {
+            background: rgb(100, 122, 115);
+        }
+        .title {
+            border-left: 5px solid black;
+        }
+        .mobile{
+            width: 100%;
+            min-width: 320px;
+            max-width: 450px;
+            min-height: 500px;
+            margin: auto;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="bg-light mobile p-2">
+            <h1 class="bg-danger mt- p-4 text-center">ลูกหนี้ออนไลน์</h1>
+            <center><img src="logo.jpeg" class="w-50"></center>
+            <div class="text-center p-2">
+                <h6>ชื่อเพื่อน : <input type="text" id="name"></h6>
+                <h6>เงินที่ติด : <input type="number" id="money"></h6>
+                <button onclick="addMore()" class="btn btn-primary">เพิ่มลูกหนี้</button>
+            </div>
+            <hr>
+            <div class="text-left m-2">
+                <h2 class="title p-2">รายชื่อลูกหนี้</h2>
+                <div id="list_friend" class="m-3">
+                    <h4>ว้าวคุณยังไม่มีลูกหนี้เลย!!</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        all_person = [];
+
+        if (localStorage.getItem("all_person") === null) {
+            localStorage.setItem("all_person", "[]");
+        }
+        all_person = JSON.parse(localStorage.all_person);
+        displayPerson();
+
+        function addMore(){
+            let name = document.getElementById("name").value
+            let money = document.getElementById("money").value
+            if (name != "" && money != 0) {
+                all_person.push([name, money])
+                document.getElementById("name").value = "";
+                document.getElementById("money").value = "";
+                displayPerson();
+            }
+
+        }
+
+        function displayPerson(){
+            list_friend.innerHTML = "";
+            let i = 1;
+            for(aPerson of all_person){
+                list_friend.innerHTML += `
+                <div class="row bg-dark text-light padding wide mb-1 p-1" ondblclick="removePerson(${i-1})">
+                    <div class="col-6">${i}. ${aPerson[0]}</div>
+                    <div class="col-6">${aPerson[1]} บาท</div>
+                </div>
+                <sp class="s"></sp>
+                `;
+                i++;
+            }
+            localStorage.setItem("all_person", JSON.stringify(all_person));
+        }
+
+        function removePerson(index){
+            remove = all_person.splice(index,1);
+            displayPerson();
+        }
+    </script>
+</body>
+</html>
