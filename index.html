@@ -115,7 +115,7 @@
                             <p><i class="fas fa-money-bill-alt"></i> ยอดเงิน</p>
                         </div>
                     </div>
-                    <div id="list_friend" class="ml-3 mr-3">
+                    <div id="list_person" class="mx-2">
                     </div>
                 </div>
     
@@ -190,11 +190,11 @@
         }
 
         function displayPerson(){
-            list_friend.innerHTML = "";
+            list_person.innerHTML = "";
             let i = 1, count = 0;
             for(aPerson of all_person){
                 if(count++%2 == 0) {
-                    list_friend.innerHTML += `
+                    list_person.innerHTML += `
                         <div class="bg-dark text-light padding wide mb-1 py-1 px-3" ondblclick="removePerson(${i-1})">
                             <div class="row">
                                 <div class="col-6">${i}. ${aPerson[0]}</div>
@@ -214,7 +214,7 @@
                         <sp class="s"></sp>
                         `;
                 } else {
-                    list_friend.innerHTML += `
+                    list_person.innerHTML += `
                         <div class="bg-secondary text-light padding wide mb-1 py-1 px-3" ondblclick="removePerson(${i-1})">
                             <div class="row">
                                 <div class="col-6">${i}. ${aPerson[0]}</div>
