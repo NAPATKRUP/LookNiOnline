@@ -150,6 +150,7 @@
                                         <h6><input type="number" id="money"></h6>
                                     </div>
                                 </div>
+                                <div id="alertMsg" class="text-danger text-left"></div>
                             </div>
                             <div class="modal-footer">
                             <button type="button" class="btn btn-dark" data-dismiss="modal">ปิด</button>
@@ -168,6 +169,8 @@
     
     <script type="text/javascript">
         addLookNi = document.getElementById("addLookNi");
+        alertMsg = document.getElementById("alertMsg");
+
         all_person = [];
 
         if (localStorage.getItem("all_person") === null) {
@@ -177,14 +180,17 @@
         displayPerson();
 
         function addMore(){
-            let name = document.getElementById("name").value
-            let money = document.getElementById("money").value
+            let name = document.getElementById("name").value;
+            let money = document.getElementById("money").value;
             if (name != "" && money != 0) {
-                all_person.push([name, money])
+                all_person.push([name, money]);
                 document.getElementById("name").value = "";
                 document.getElementById("money").value = "";
+                alertMsg.innerText = "";
                 $('#addLookNi').modal('hide');
                 displayPerson();
+            } else {
+                alertMsg.innerText = "โปรดใส่ชื่อกับจำนวนเงินให้ถูกต้อง";
             }
 
         }
@@ -204,7 +210,7 @@
                                 <div class="col-6"></div>
                                 <div class="col-6">
                                     <p class="smallText text-right">
-                                        <a onclicks="">ยืมเพิ่ม/จ่ายเงิน</a>
+                                        <a onclicks="editMoney(${i-1})">ยืมเพิ่ม/จ่ายเงิน</a>
                                         |
                                         <a onclick="removePerson(${i-1})">ลบ</a>
                                     </p>
@@ -224,7 +230,7 @@
                                 <div class="col-6"></div>
                                 <div class="col-6">
                                     <p class="smallText text-right">
-                                        <a onclick="">ยืมเพิ่ม/จ่ายเงิน</a>
+                                        <a onclick="editMoney(${i-1})">ยืมเพิ่ม/จ่ายเงิน</a>
                                         |
                                         <a onclick="removePerson(${i-1})">ลบ</a>
                                     </p>
@@ -237,6 +243,10 @@
                 i++;
             }
             localStorage.setItem("all_person", JSON.stringify(all_person));
+        }
+
+        function editMoney(index) {
+            alert("Comming Soon!!");
         }
 
         function removePerson(index){
