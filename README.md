@@ -7,7 +7,7 @@
 3.จะได้แอพที่สามารถเข้าใช้งานได้เลย <br>
 
 ### How to use
-<img src="https://github.com/NAPATKRUP/LookNiOnline/blob/master/Overview/27BD4FF3-3923-4849-92EF-1011AE9F5D71.jpeg">
+<img src="https://github.com/NAPATKRUP/LookNiOnline/blob/master/Overview/E15DE9BB-6FFB-4E2E-84BD-582079891D08.jpeg">
 
 ### Pain point
 มีคนมายืมเงินเราเป็นจำนวนมาก ทำให้เราสับสนไม่รู้จะจำยังไงดี เลยจดไว้ในแอพ note บนมือถือบางทีเราก็เก็บไว้อยู่หลายที่ทำให้เราต้องมานั่งไล่หา บางทีก็จดใส่ไว้ในกระดาษแต่เราก็ดันทำหายไปทำให้บางทีลูกหนี้บางคนยังไม่ได้จ่ายเงินเรา ก็ลืมทวงเพราะจำไม่ได้ว่าเคยลืมเงินเราไป
