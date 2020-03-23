@@ -1,4 +1,9 @@
 # LookNiOnline
 สวัสดีเรามาเช็คกันดีกว่าว่ายังมีใครยังไม่คืนเงินเรามั้ยยย!!<br>
-<img src="https://github.com/NAPATKRUP/LookNiOnline/blob/master/Overview/1.jpg" width="350px"/>
-<img src="https://github.com/NAPATKRUP/LookNiOnline/blob/master/Overview/2.jpg" width="350px"/>
+
+### How to install
+1.เข้าไปที่เว็บ https://looknionline.netlify.com/ <br>
+2.ทำการกดปุ่ม Add to Home Screen <br>
+3.จะได้แอพที่สามารถเข้าใช้งานได้เลย <br>
+
+### How to use
