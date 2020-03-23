@@ -84,6 +84,11 @@
             font-size: 12px;
         }
 
+        .his-box {
+            height: 140px;
+            overflow-y: auto;
+        }
+
         /* ScrollBar style */
         .style-1::-webkit-scrollbar-track {
             -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
@@ -151,6 +156,7 @@
                         </button>
                     </div>
                 </div>
+
                 <!-- หน้าเพิ่มลูกหนี้ -->
                 <div class="m-2" id="add-page">
                     <h4 class="text-right title p-2">เพิ่มรายชื่อลูกหนี้</h4>
@@ -180,11 +186,48 @@
                         </button>
                     </div>
                 </div>
+
                 <!-- หน้าประวัติ -->
-                <div class="m-2" id="history-page"></div>
+                <div class="m-2" id="history-page">
+                    <h4 class="text-right title p-2">ประวัติ</h4>
+                    <div class="p-1 mt-1 bg-light text-dark rounded">
+                        <div class="row px-2 py-2">
+                            <div class="col-2">
+                                <h6 class="mt-2"><i class="fas fa-user-alt"></i> ชื่อ</h6>
+                            </div>
+                            <div class="col-5">
+                                <h6 id="his_showname"></h6>
+                            </div>
+                            <div class="col-5">
+                                <h6 id="his_showmoney"></h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 mt-2 bg-dark text-light rounded his-box">
+                        <div class="row">
+                            <div class="col-6 text-left"><h6>ยืมเงิน</h6></div>
+                            <div class="col-6 text-right" id="total_borrow"><u>500 บาท</u></div>
+                        </div>
+                        <small id="his_borrow">
+                            <div class="row">
+                                <div class="col-6 text-left">3/24/2020 1:00</div>
+                                <div class="col-6 text-right">500 บาท</div>
+                            </div>
+                        </small>
+                    </div>
+                    <div class="p-4 mt-2 bg-secondary text-light rounded his-box">
+                        <div class="row">
+                            <div class="col-6 text-left"><h6>คืนเงิน</h6></div>
+                            <div class="col-6 text-right" id="total_pay"><u>0 บาท</u></div>
+                        </div>
+                        <small id="his_pay"></small>
+                    </div>
+                    <div class="row mt-2" id="his_button"></div>
+                </div>
+
                 <!-- หน้าแก้ไขจำนวนเงิน -->
                 <div class="m-2" id="edit-page">
-                    <h4 class="text-right title p-2">ยืนเพิ่ม/คืนเงิน</h4>
+                    <h4 class="text-right title p-2">ยืมเพิ่ม/คืนเงิน</h4>
                     <div class="p-4 mt-4 bg-dark text-light rounded">
                         <div class="row px-2 py-4">
                             <div class="col-6">
@@ -216,6 +259,7 @@
                         <div class="row mt-4" id="edit_button_confirm"></div>
                     </div>
                 </div>
+
                 <!-- หน้ายืนยันการลบ -->
                 <div class="m-2" id="delete-page">
                     <h4 class="text-right title p-2">ยืนยันการลบรายการ</h4>
@@ -342,7 +386,33 @@
 
         // View History
         function viewHistroy(index) {
+            mockupClick("home-page", "history-page");
+            his_showname = document.getElementById("his_showname");
+            his_showmoney = document.getElementById("his_showmoney");
+            his_button = document.getElementById("his_button");
+            his_showname.innerHTML = `<input type="text" class="w-100 form-control" value="${all_person[index][0]}" disabled>`;
+            his_showmoney.innerHTML = `<input type="text" class="w-100 form-control" value="${all_person[index][1]} บาท" disabled>`;
+            his_button.innerHTML = `<div class="col-4">
+                                        <button class="btn btn-dark rounded w-100" onclick="changeByHis(${index}, 'edit')">
+                                            ยืม/คืน <i class="fas fa-check-circle"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="btn btn-dark rounded w-100" onclick="changeByHis(${index}, 'delete')">
+                                            ลบ <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="btn btn-secondary rounded w-100" onclick="mockupClick('history-page', 'home-page')">
+                                            ย้อนกลับ <i class="fas fa-chevron-circle-left"></i>
+                                        </button>
+                                    </div>`;
             alert("ViewHistroy Comming Soon!!");
+        }
+        function changeByHis(index, go_to) {
+            document.querySelector('#history-page').style.display = "none";
+            if (go_to == 'edit') showEditPage(index);
+            else if (go_to == 'delete') showDeletePage(index);
         }
 
         // Edit Function
