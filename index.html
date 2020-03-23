@@ -72,13 +72,39 @@
             width: 100%;
             min-width: 320px;
             max-width: 450px;
-            min-height: 500px;
+            height: 500px;
             margin: auto;
             position: relative;
         }
 
+        #list_person {
+            height: 320px;
+            overflow-y: auto;
+        }
+
+        .style-1::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            background-color: #F5F5F5;
+        }
+
+        .style-1::-webkit-scrollbar {
+            width: 12px;
+            background-color: #F5F5F5;
+        }
+
+        .style-1::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #555;
+        }
+
         .smallText {
             font-size: 12px;
+        }
+
+        #add-page {
+            display:none;
         }
 
         .footer {
@@ -105,7 +131,8 @@
         </div> -->
         <div class="container mt-4">
             <div class="bg-light mobile p-2">
-                <div class="m-2">
+                <!-- หน้าหลัก -->
+                <div class="m-2" id="home-page">
                     <h4 class="text-right title p-2">รายชื่อลูกหนี้</h4>
                     <div class="row">
                         <div class="border-bottom-1 border-secondary col-6 text-center">
@@ -115,49 +142,42 @@
                             <p><i class="fas fa-money-bill-alt"></i> ยอดเงิน</p>
                         </div>
                     </div>
-                    <div id="list_person" class="mx-2">
+                    <div id="list_person" class="mx-2 style-1">
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-9"></div>
+                        <button class="btn btn-dark rounded ml-3 col-2" onclick="mockupClick('home-page', 'add-page')">
+                            เพิ่ม <i class="fas fa-plus"></i>
+                        </button>
                     </div>
                 </div>
-    
-    
-                <div id="myAddButton" class="text-right m-3">
-                    <button type="button" class="btn btn-dark rounded-circle p-2" data-toggle="modal" data-target="#addLookNi">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                    <div class="modal fade" id="addLookNi" tabindex="-1" role="dialog" aria-labelledby="addLookNiList" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header bg-dark text-light">
-                            <h5 class="modal-title">เพิ่มรายชื่อลูกหนี้</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true" class="text-light">&times;</span>
-                            </button>
+                <!-- หน้าเพิ่มลูกหนี้ -->
+                <div class="m-2" id="add-page">
+                    <h4 class="text-right title p-2">เพิ่มรายชื่อลูกหนี้</h4>
+                    <div class="p-4 mt-4 bg-dark text-light rounded">
+                        <div class="row px-2 py-4">
+                            <div class="col-4">
+                                <h6 class="mt-2"><i class="fas fa-user-alt"></i> ชื่อ</h6>
                             </div>
-                            <div class="modal-body text-center">
-                                <div class="row">
-                                    <div class="col-4 text-left">
-                                        <h6>ชื่อ : </h6>
-                                    </div>
-                                    <div class="col-8">
-                                        <h6><input type="text" id="name"></h6>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-4 text-left">
-                                        <h6>จำนวนเงิน : </h6>
-                                    </div>
-                                    <div class="col-8">
-                                        <h6><input type="number" id="money"></h6>
-                                    </div>
-                                </div>
-                                <div id="alertMsg" class="text-danger text-left"></div>
-                            </div>
-                            <div class="modal-footer">
-                            <button type="button" class="btn btn-dark" data-dismiss="modal">ปิด</button>
-                            <button type="button" class="btn btn-primary" onclick="addMore()">เพิ่มลูกหนี้</button>
+                            <div class="col-8">
+                                <h6><input type="text" name="name" id="name" class="w-100 form-control"></h6>
                             </div>
                         </div>
+                        <div class="row px-2">
+                            <div class="col-4">
+                                <h6 class="mt-2"><i class="fas fa-coins"></i> จำนวนเงิน</h6>
+                            </div>
+                            <div class="col-8">
+                                <h6><input type="number" name="money" id="money" class="w-100 form-control"></h6>
+                            </div>
                         </div>
+                        <div id="alertMsg" class="mt-2 text-light text-left"></div>
+                        <button class="btn btn-light mt-4 rounded w-100" onclick="addMore()">
+                            เพิ่มรายชื่อ <i class="fas fa-user-plus"></i>
+                        </button>
+                        <button class="btn btn-secondary mt-2 rounded w-100" onclick="mockupClick('add-page', 'home-page')">
+                            ย้อนกลับ <i class="fas fa-chevron-circle-left"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -179,6 +199,11 @@
         all_person = JSON.parse(localStorage.all_person);
         displayPerson();
 
+        function mockupClick(pageToHide, pageToShow) {
+            document.querySelector('#'+pageToHide).style.display = "none";
+            document.querySelector('#'+pageToShow).style.display = "block";
+        }
+
         function addMore(){
             let name = document.getElementById("name").value;
             let money = document.getElementById("money").value;
@@ -187,10 +212,10 @@
                 document.getElementById("name").value = "";
                 document.getElementById("money").value = "";
                 alertMsg.innerText = "";
-                $('#addLookNi').modal('hide');
                 displayPerson();
+                mockupClick("add-page", "home-page");
             } else {
-                alertMsg.innerText = "โปรดใส่ชื่อกับจำนวนเงินให้ถูกต้อง";
+                alertMsg.innerText = "* โปรดใส่ชื่อกับจำนวนเงินให้ถูกต้อง";
             }
 
         }
