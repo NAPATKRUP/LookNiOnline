@@ -145,7 +145,9 @@
                     <div id="list_person" class="mx-2 style-1">
                     </div>
                     <div class="row mt-2">
-                        <div class="col-8"></div>
+                        <div class="col-8 px-4">
+                            <small><u><b>หมายเหตุ</b></u> กด 2 ครั้งที่รายชื่อเพื่อดูประวัติการยืมเงินและคืนเงิน</small>
+                        </div>
                         <button class="btn btn-dark rounded ml-3 col-3" onclick="mockupClick('home-page', 'add-page')">
                             เพิ่ม <i class="fas fa-plus"></i>
                         </button>
@@ -181,8 +183,9 @@
                     </div>
                 </div>
             </div>
-            <div class="footer text-right mt-2 p-2 bg-dark text-light">
-                <p>LookNiOnline by <a href="https://www.instagram.com/napat_ar/">@Napat_Ar</a></p>
+            <div class="footer text-right mt-2 p-2 bg-dark text-light text-center">
+                <small>*เศษทษนิยมจะถูกปัดขึ้นโดยอัตโนมัติ</small><br/>
+                <small>LookNiOnline by <a href="https://www.instagram.com/napat_ar/">@Napat_Ar</a></small>
             </div>
         </div>
     </div>
@@ -199,6 +202,15 @@
         all_person = JSON.parse(localStorage.all_person);
         displayPerson();
 
+        function LoadingFunction() {
+            myTime = setTimeout(showPage, 2000);
+        }
+
+        function showPage() {
+            document.getElementById("load").style.display = "none";
+            document.getElementById("main").style.display = "block";
+        }
+
         function mockupClick(pageToHide, pageToShow) {
             document.querySelector('#'+pageToHide).style.display = "none";
             document.querySelector('#'+pageToShow).style.display = "block";
@@ -208,14 +220,14 @@
             let name = document.getElementById("name").value;
             let money = document.getElementById("money").value;
             if (name != "" && money != 0) {
-                all_person.push([name, money]);
+                all_person.push([name, Math.ceil(money)]);
                 document.getElementById("name").value = "";
                 document.getElementById("money").value = "";
                 alertMsg.innerText = "";
                 displayPerson();
                 mockupClick("add-page", "home-page");
             } else {
-                alertMsg.innerText = "* โปรดใส่ชื่อกับจำนวนเงินให้ถูกต้อง";
+                alertMsg.innerText = "*โปรดใส่ชื่อกับจำนวนเงินให้ถูกต้อง";
             }
 
         }
@@ -226,7 +238,7 @@
             for(aPerson of all_person){
                 if(count++%2 == 0) {
                     list_person.innerHTML += `
-                        <div class="bg-dark text-light padding wide mb-1 py-1 px-3" ondblclick="removePerson(${i-1})">
+                        <div class="bg-dark text-light padding wide mb-1 py-1 px-3" ondblclick="viewHistroy(${i-1})">
                             <div class="row">
                                 <div class="col-6">${i}. ${aPerson[0]}</div>
                                 <div class="col-6 text-right">${aPerson[1]} บาท</div>
@@ -235,7 +247,7 @@
                                 <div class="col-6"></div>
                                 <div class="col-6">
                                     <p class="smallText text-right">
-                                        <a onclicks="editMoney(${i-1})">ยืมเพิ่ม/จ่ายเงิน</a>
+                                        <a onclick="editMoney(${i-1})">ยืมเพิ่ม/คืนเงิน</a>
                                         |
                                         <a onclick="removePerson(${i-1})">ลบ</a>
                                     </p>
@@ -246,7 +258,7 @@
                         `;
                 } else {
                     list_person.innerHTML += `
-                        <div class="bg-secondary text-light padding wide mb-1 py-1 px-3" ondblclick="removePerson(${i-1})">
+                        <div class="bg-secondary text-light padding wide mb-1 py-1 px-3" ondblclick="viewHistroy(${i-1})">
                             <div class="row">
                                 <div class="col-6">${i}. ${aPerson[0]}</div>
                                 <div class="col-6 text-right">${aPerson[1]} บาท</div>
@@ -255,7 +267,7 @@
                                 <div class="col-6"></div>
                                 <div class="col-6">
                                     <p class="smallText text-right">
-                                        <a onclick="editMoney(${i-1})">ยืมเพิ่ม/จ่ายเงิน</a>
+                                        <a onclick="editMoney(${i-1})">ยืมเพิ่ม/คืนเงิน</a>
                                         |
                                         <a onclick="removePerson(${i-1})">ลบ</a>
                                     </p>
@@ -270,22 +282,17 @@
             localStorage.setItem("all_person", JSON.stringify(all_person));
         }
 
+        function viewHistroy(index) {
+            alert("ViewHistroy Comming Soon!!");
+        }
+
         function editMoney(index) {
-            alert("Comming Soon!!");
+            alert("UpdateMoney Comming Soon!!");
         }
 
         function removePerson(index){
             remove = all_person.splice(index,1);
             displayPerson();
-        }
-
-        function LoadingFunction() {
-            myTime = setTimeout(showPage, 2000);
-        }
-
-        function showPage() {
-            document.getElementById("load").style.display = "none";
-            document.getElementById("main").style.display = "block";
         }
     </script>
 </body>
