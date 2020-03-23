@@ -183,7 +183,39 @@
                 <!-- หน้าประวัติ -->
                 <div class="m-2" id="history-page"></div>
                 <!-- หน้าแก้ไขจำนวนเงิน -->
-                <div class="m-2" id="edit-page"></div>
+                <div class="m-2" id="edit-page">
+                    <h4 class="text-right title p-2">ยืนเพิ่ม/คืนเงิน</h4>
+                    <div class="p-4 mt-4 bg-dark text-light rounded">
+                        <div class="row px-2 py-4">
+                            <div class="col-6">
+                                <h6 class="mt-2"><i class="fas fa-user-alt"></i> ชื่อ</h6>
+                            </div>
+                            <div class="col-6">
+                                <h6 id="edit_showname"></h6>
+                            </div>
+                        </div>
+                        <div class="row px-2">
+                            <div class="col-6">
+                                <h6 class="mt-2"><i class="fas fa-coins"></i> จำนวนเงิน</h6>
+                            </div>
+                            <div class="col-6">
+                                <h6><input type="number" name="edit_money" id="edit_money" class="w-100 form-control"></h6>
+                            </div>
+                        </div>
+                        <div class="row mt-4 px-2">
+                            <div class="col-6">
+                                <h6 class="mt-2"><i class="fas fa-toggle-on"></i> สถานะ</h6>
+                            </div>
+                            <div class="col-6">
+                                <h6 class="mt-2">
+                                    <input type="radio" id="borrow" name="edit_status" class="m-1" value="borrow">ยืมเพิ่ม
+                                    <input type="radio" id="pay" name="edit_status" class="m-1" value="pay">คืนเงิน
+                                </h6>
+                            </div>
+                        </div>
+                        <div class="row mt-4" id="edit_button_confirm"></div>
+                    </div>
+                </div>
                 <!-- หน้ายืนยันการลบ -->
                 <div class="m-2" id="delete-page">
                     <h4 class="text-right title p-2">ยืนยันการลบรายการ</h4>
@@ -204,7 +236,7 @@
                                 <h6 id="del_showmoney"></h6>
                             </div>
                         </div>
-                        <div class="row mt-4" id="button_confirm"></div>
+                        <div class="row mt-4" id="del_button_confirm"></div>
                     </div>
                 </div>
             </div>
@@ -218,9 +250,6 @@
     <script type="text/javascript">
         list_person = document.getElementById("list_person");
         alertMsg = document.getElementById("alertMsg");
-        del_showname = document.getElementById("del_showname");
-        del_showmoney = document.getElementById("del_showmoney");
-        button_confirm = document.getElementById("button_confirm");
         all_person = [];
 
         if (localStorage.getItem("all_person") === null) {
@@ -276,7 +305,7 @@
                                 <div class="col-6"></div>
                                 <div class="col-6">
                                     <p class="smallText text-right">
-                                        <a onclick="editMoney(${i-1})">ยืมเพิ่ม/คืนเงิน</a>
+                                        <a onclick="showEditPage(${i-1})">ยืมเพิ่ม/คืนเงิน</a>
                                         |
                                         <a onclick="showDeletePage(${i-1})">ลบ</a>
                                     </p>
@@ -296,7 +325,7 @@
                                 <div class="col-6"></div>
                                 <div class="col-6">
                                     <p class="smallText text-right">
-                                        <a onclick="editMoney(${i-1})">ยืมเพิ่ม/คืนเงิน</a>
+                                        <a onclick="showEditPage(${i-1})">ยืมเพิ่ม/คืนเงิน</a>
                                         |
                                         <a onclick="showDeletePage(${i-1})">ลบ</a>
                                     </p>
@@ -317,6 +346,22 @@
         }
 
         // Edit Function
+        function showEditPage(index) {
+            mockupClick("home-page", "edit-page");
+            edit_showname = document.getElementById("edit_showname");
+            edit_button_confirm = document.getElementById("edit_button_confirm");
+            edit_showname.innerHTML = `<input type="text" class="w-100 form-control" value="${all_person[index][0]}" disabled>`;
+            edit_button_confirm.innerHTML = `<div class="col-6">
+                                                <button class="btn btn-secondary rounded w-100" onclick="mockupClick('edit-page', 'home-page')">
+                                                    ยกเลิก <i class="fas fa-chevron-circle-left"></i>
+                                                </button>
+                                            </div>
+                                            <div class="col-6">
+                                                <button class="btn btn-light rounded w-100" onclick="editMoney(${index})">
+                                                    ยืนยัน <i class="fas fa-check-circle"></i>
+                                                </button>
+                                            </div>`;
+        }
         function editMoney(index) {
             alert("UpdateMoney Comming Soon!!");
         }
@@ -324,18 +369,20 @@
         // Delete Function
         function showDeletePage(index) {
             mockupClick("home-page", "delete-page");
+            del_showname = document.getElementById("del_showname");
+            del_showmoney = document.getElementById("del_showmoney");
+            del_button_confirm = document.getElementById("del_button_confirm");
             del_showname.innerHTML = `<input type="text" class="w-100 form-control" value="${all_person[index][0]}" disabled>`;
             del_showmoney.innerHTML = `<input type="text" class="w-100 form-control" value="${all_person[index][1]}" disabled>`;
-            button_confirm.innerHTML = `<div class="col-6">
-                                            <button class="btn btn-danger rounded w-100" onclick="removePerson(${index})">
-                                                ลบ <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </div>
-                                        <div class="col-6">
-                                            <button class="btn btn-light rounded w-100" onclick="mockupClick('delete-page', 'home-page')">
-                                                ยกเลิก <i class="fas fa-chevron-circle-left"></i>
-                                            </button>
-                                        </div>`;
+            del_button_confirm.innerHTML = `<div class="col-6">
+                                                <button class="btn btn-secondary rounded w-100" onclick="mockupClick('delete-page', 'home-page')">
+                                                    ยกเลิก <i class="fas fa-chevron-circle-left"></i>
+                                                </button>
+                                            </div><div class="col-6">
+                                                <button class="btn btn-danger rounded w-100" onclick="removePerson(${index})">
+                                                    ลบ <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>`;
         }
         function removePerson(index) {
             remove = all_person.splice(index,1);
