@@ -256,6 +256,7 @@
                                 </h6>
                             </div>
                         </div>
+                        <div id="errorMsg" class="mt-2 text-light text-left"></div>
                         <div class="row mt-4" id="edit_button_confirm"></div>
                     </div>
                 </div>
@@ -317,12 +318,20 @@
             document.querySelector('#'+pageToShow).style.display = "block";
         }
 
+        // Get Date Time
+        function getNowDate() {
+            var d = new Date();
+            var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
+                              d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+            return datestring;
+        }
+
         // Add Function
-        function addMore(){
+        function addMore() {
             let name = document.getElementById("name").value;
             let money = document.getElementById("money").value;
-            if (name != "" && money != 0) {
-                all_person.push([name, Math.ceil(money)]);
+            if (name != "" && money > 0) {
+                all_person.push([name, Math.ceil(money), ["borrow", [getNowDate(), Math.ceil(money)]], ["pay"]]);
                 document.getElementById("name").value = "";
                 document.getElementById("money").value = "";
                 alertMsg.innerText = "";
@@ -334,51 +343,35 @@
         }
 
         // Update to show
-        function displayPerson(){
+        function displayPerson() {
+            console.log(all_person);
             list_person.innerHTML = "";
+            myadd = "";
             let i = 1, count = 0;
             for(aPerson of all_person){
-                if(count++%2 == 0) {
-                    list_person.innerHTML += `
-                        <div class="bg-dark text-light padding wide mb-1 py-1 px-3" ondblclick="viewHistroy(${i-1})">
-                            <div class="row">
-                                <div class="col-6">${i}. ${aPerson[0]}</div>
-                                <div class="col-6 text-right">${aPerson[1]} บาท</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6"></div>
-                                <div class="col-6">
-                                    <p class="smallText text-right">
-                                        <a onclick="showEditPage(${i-1})">ยืมเพิ่ม/คืนเงิน</a>
-                                        |
-                                        <a onclick="showDeletePage(${i-1})">ลบ</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <sp class="s"></sp>
-                        `;
-                } else {
-                    list_person.innerHTML += `
-                        <div class="bg-secondary text-light padding wide mb-1 py-1 px-3" ondblclick="viewHistroy(${i-1})">
-                            <div class="row">
-                                <div class="col-6">${i}. ${aPerson[0]}</div>
-                                <div class="col-6 text-right">${aPerson[1]} บาท</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6"></div>
-                                <div class="col-6">
-                                    <p class="smallText text-right">
-                                        <a onclick="showEditPage(${i-1})">ยืมเพิ่ม/คืนเงิน</a>
-                                        |
-                                        <a onclick="showDeletePage(${i-1})">ลบ</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <sp class="s"></sp>
-                        `;
-                }
+                if (aPerson[1] > 0) myadd += `<div class="bg-dark`;
+                else if (aPerson[1] < 0) myadd += `<div class="bg-success`;
+                else myadd += '<div class="bg-warning';
+                myadd += ` text-light padding wide mb-1 py-1 px-3" ondblclick="viewHistroy(${i-1})">
+                                            <div class="row">
+                                                <div class="col-6">${i}. ${aPerson[0]}</div>
+                                                <div class="col-6 text-right">${aPerson[1]} บาท</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6"></div>
+                                                <div class="col-6">
+                                                    <p class="smallText text-right">
+                                                        <a onclick="showEditPage(${i-1})">ยืมเพิ่ม/คืนเงิน</a>
+                                                        |
+                                                        <a onclick="showDeletePage(${i-1})">ลบ</a>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <sp class="s"></sp>
+                                        `;
+                list_person.innerHTML += myadd;
+                myadd = "";
                 i++;
             }
             localStorage.setItem("all_person", JSON.stringify(all_person));
@@ -433,8 +426,34 @@
                                             </div>`;
         }
         function editMoney(index) {
-            alert("UpdateMoney Comming Soon!!");
+            let edit_money = document.getElementById("edit_money").value;
+            let errorMsg = document.getElementById("errorMsg");
+            let edit_status = displayRadioValue();
+            if (edit_status != "" && edit_money > 0) {
+                if (edit_status == "borrow") {
+                    all_person[index][1] += Math.ceil(edit_money);
+                    all_person[index][2].push([getNowDate(), Math.ceil(Math.ceil(edit_money))]);
+                } else if (edit_status == "pay") {
+                    all_person[index][1] -= Math.ceil(edit_money);
+                    // if (all_person[index][1] < 0) all_person[index][1] = 0;
+                    all_person[index][3].push([getNowDate(), Math.ceil(Math.ceil(edit_money))]);
+                }
+                document.getElementById("edit_money").value = "";
+                errorMsg.innerText = "";
+                displayPerson();
+                mockupClick("edit-page", "home-page");
+            } else {
+                errorMsg.innerText = "*โปรดใส่จำนวนเงินและเลือกขั้นตอนการทำรายการให้ถูกต้อง";
+            }
         }
+        function displayRadioValue() { 
+            var ele = document.getElementsByName('edit_status'); 
+            for(i = 0; i < ele.length; i++) { 
+                if(ele[i].checked) 
+                    return ele[i].value; 
+            }
+            return "";
+        } 
 
         // Delete Function
         function showDeletePage(index) {
