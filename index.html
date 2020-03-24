@@ -324,8 +324,8 @@
             let money = document.getElementById("money").value;
             if (name != "" && money > 0) {
                 all_person.push([name, Math.ceil(money), ["borrow", [getNowDate(), Math.ceil(money)]], ["pay"]]);
-                name.value = "";
-                money.value = "";
+                document.getElementById("name").value = "";
+                document.getElementById("money").value = "";
                 alertMsg.innerText = "";
                 displayPerson();
                 mockupClick("add-page", "home-page");
@@ -453,12 +453,12 @@
             if (edit_status != "" && edit_money > 0) {
                 if (edit_status == "borrow") {
                     all_person[index][1] += Math.ceil(edit_money);
-                    all_person[index][2].push([getNowDate(), Math.ceil(Math.ceil(edit_money))]);
+                    all_person[index][2].push([getNowDate(), Math.ceil(edit_money)]);
                 } else if (edit_status == "pay") {
-                    all_person[index][1] -= Math.ceil(edit_money);
-                    all_person[index][3].push([getNowDate(), Math.ceil(Math.ceil(edit_money))]);
+                    all_person[index][1] -= Math.floor(edit_money);
+                    all_person[index][3].push([getNowDate(), Math.floor(edit_money)]);
                 }
-                edit_money.value = "";
+                document.getElementById("edit_money").value = "";
                 errorMsg.innerText = "";
                 displayPerson();
                 mockupClick("edit-page", "home-page");
