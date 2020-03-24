@@ -85,7 +85,7 @@
         }
 
         .his-box {
-            height: 140px;
+            height: 100px;
             overflow-y: auto;
         }
 
@@ -192,34 +192,26 @@
                     <h4 class="text-right title p-2">ประวัติ</h4>
                     <div class="p-1 mt-1 bg-light text-dark rounded">
                         <div class="row px-2 py-2">
-                            <div class="col-2">
-                                <h6 class="mt-2">ชื่อ</h6>
-                            </div>
-                            <div class="col-5">
+                            <div class="col-6">
                                 <h6 id="his_showname"></h6>
                             </div>
-                            <div class="col-5">
+                            <div class="col-6">
                                 <h6 id="his_showmoney"></h6>
                             </div>
                         </div>
                     </div>
-                    <div class="p-4 bg-dark text-light rounded his-box">
-                        <div class="row">
-                            <div class="col-6 text-left"><h6>ยืมเงิน</h6></div>
-                            <div class="col-6 text-right" id="total_borrow"><u>500 บาท</u></div>
-                        </div>
-                        <small id="his_borrow">
-                            <div class="row">
-                                <div class="col-6 text-left">3/24/2020 1:00</div>
-                                <div class="col-6 text-right">500 บาท</div>
-                            </div>
-                        </small>
+                    <div class="row mx-1 bg-dark text-light rounded p-2">
+                        <div class="col-6 text-left"><h6>ยืมเงิน</h6></div>
+                        <div class="col-6 text-right" id="total_borrow"></div>
                     </div>
-                    <div class="p-4 mt-2 bg-secondary text-light rounded his-box">
-                        <div class="row">
-                            <div class="col-6 text-left"><h6>คืนเงิน</h6></div>
-                            <div class="col-6 text-right" id="total_pay"><u>0 บาท</u></div>
-                        </div>
+                    <div class="mx-1 px-4 bg-dark text-light rounded his-box style-1">
+                        <small id="his_borrow"></small>
+                    </div>
+                    <div class="row mt-2 mx-1 bg-info text-light rounded p-2">
+                        <div class="col-6 text-left"><h6>คืนเงิน</h6></div>
+                        <div class="col-6 text-right" id="total_pay"></div>
+                    </div>
+                    <div class="mx-1 px-4 bg-info text-light rounded his-box style-1">
                         <small id="his_pay"></small>
                     </div>
                     <div class="row mt-2" id="his_button"></div>
@@ -321,7 +313,7 @@
         // Get Date Time
         function getNowDate() {
             var d = new Date();
-            var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
+            var datestring = ("0" + d.getDate()).slice(-2) + "/" + ("0"+(d.getMonth()+1)).slice(-2) + "/" +
                               d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
             return datestring;
         }
@@ -332,8 +324,8 @@
             let money = document.getElementById("money").value;
             if (name != "" && money > 0) {
                 all_person.push([name, Math.ceil(money), ["borrow", [getNowDate(), Math.ceil(money)]], ["pay"]]);
-                document.getElementById("name").value = "";
-                document.getElementById("money").value = "";
+                name.value = "";
+                money.value = "";
                 alertMsg.innerText = "";
                 displayPerson();
                 mockupClick("add-page", "home-page");
@@ -348,7 +340,7 @@
             list_person.innerHTML = "";
             myadd = "";
             let i = 1, count = 0;
-            for(aPerson of all_person){
+            for (aPerson of all_person) {
                 if (aPerson[1] > 0) myadd += `<div class="bg-dark`;
                 else if (aPerson[1] < 0) myadd += `<div class="bg-success`;
                 else myadd += '<div class="bg-warning';
@@ -383,8 +375,16 @@
             his_showname = document.getElementById("his_showname");
             his_showmoney = document.getElementById("his_showmoney");
             his_button = document.getElementById("his_button");
+            total_borrow = document.getElementById("total_borrow");
+            his_borrow = document.getElementById("his_borrow");
+            total_pay = document.getElementById("total_pay");
+            his_pay = document.getElementById("his_pay");
+            borrowText = "";
+            payText = "";
+            tBorrow = 0;
+            tPay = 0;
             his_showname.innerHTML = `<input type="text" class="w-100 form-control" value="${all_person[index][0]}" disabled>`;
-            his_showmoney.innerHTML = `<input type="text" class="w-100 form-control" value="${all_person[index][1]} บาท" disabled>`;
+            his_showmoney.innerHTML = `<input type="text" class="w-100 form-control" value="คงเหลือ ${all_person[index][1]} บาท" disabled>`;
             his_button.innerHTML = `<div class="col-4">
                                         <button class="btn btn-dark rounded w-100" onclick="changeByHis(${index}, 'edit')">
                                             ยืม/คืน
@@ -400,7 +400,28 @@
                                             ย้อนกลับ
                                         </button>
                                     </div>`;
-            alert("ViewHistroy Comming Soon!!");
+            for (his of all_person[index][2]) {
+                if(his == "borrow") continue
+                else {
+                    borrowText += `<div class="row">
+                                    <div class="col-6 text-left">${his[0]}</div>
+                                    <div class="col-6 text-right">${his[1]} บาท</div>
+                                </div>`;
+                    tBorrow += his[1];
+                }
+            }
+            for (his of all_person[index][3]) {
+                if(his == "pay") continue
+                else payText += `<div class="row">
+                                <div class="col-6 text-left">${his[0]}</div>
+                                <div class="col-6 text-right">${his[1]} บาท</div>
+                            </div>`;
+                    tPay += his[1];
+            }
+            total_borrow.innerHTML = `<u>${tBorrow} บาท</u>`;
+            total_pay.innerHTML = `<u>${tPay} บาท</u>`;
+            his_borrow.innerHTML = borrowText;
+            his_pay.innerHTML = payText;
         }
         function changeByHis(index, go_to) {
             document.querySelector('#history-page').style.display = "none";
@@ -435,10 +456,9 @@
                     all_person[index][2].push([getNowDate(), Math.ceil(Math.ceil(edit_money))]);
                 } else if (edit_status == "pay") {
                     all_person[index][1] -= Math.ceil(edit_money);
-                    // if (all_person[index][1] < 0) all_person[index][1] = 0;
                     all_person[index][3].push([getNowDate(), Math.ceil(Math.ceil(edit_money))]);
                 }
-                document.getElementById("edit_money").value = "";
+                edit_money.value = "";
                 errorMsg.innerText = "";
                 displayPerson();
                 mockupClick("edit-page", "home-page");
